@@ -24,6 +24,10 @@ public class PokemonTamagotchiGame {
         scanner = new Scanner(System.in);
         secureRandom = new SecureRandom();
         pokemons = new Hashtable<>();
+        
+        addPokemonToList("Default1", new Pokemon(Species.CYNDAQUIL));
+        addPokemonToList("Default2", new Pokemon(Species.MEWTWO));
+        addPokemonToList("Default3", new Pokemon(Species.PIKACHU));
     }
     
     private void printMenuOptions(){
@@ -79,6 +83,11 @@ public class PokemonTamagotchiGame {
         return nickName;
     }
     
+    private Pokemon addPokemonToList(String nickname, Pokemon newPokemon){
+        newPokemon.setPokemonNickName(nickname);
+        pokemons.put(nickname, newPokemon);
+        return newPokemon;
+    }
     private void createPokemonMenu(){
         System.out.println("W E L C O M E ! !");
 
@@ -92,11 +101,10 @@ public class PokemonTamagotchiGame {
         String nickName = choosingPokemonNickname();
         
         if (nickName.length() >= 1){
-            newPokemon.setPokemonNickName(nickName);
+            //NEw METHOD ADD POKEMON TO POKEDEX
+            newPokemon = addPokemonToList(nickName,newPokemon);
             System.out.println("WELCOME TO POKEMON TAMAGOTCHI");
-            System.out.println(newPokemon.getPokemonPrt().toString());
-            
-            pokemons.put(nickName, newPokemon);
+            System.out.println(newPokemon.getPokemonPrt().toString());          
         }
         
     }
@@ -107,8 +115,10 @@ public class PokemonTamagotchiGame {
             System.out.println("");
         } else {
             int n = 1;
+            System.out.println("No."+"\tNICKNAME"+"\t SPECIE");
             for (Map.Entry<String, Pokemon> e : pokemons.entrySet()) {
-                System.out.println(n +". "+e.getValue().getPokemonNickName()+"("+e.getValue().name+")");
+                
+                System.out.println(n +".\t"+e.getValue().getPokemonNickName()+" \t("+e.getValue().name+")");
                 n++;
             }
         }
@@ -116,7 +126,29 @@ public class PokemonTamagotchiGame {
     
     private void selectPokemonMenu(){
         System.out.println("SELECT YOUR POKEMON");
+
         listPokemons();
+
+        if (pokemons.isEmpty() != true) {
+            String choice;
+            System.out.print(">");
+            choice = scanner.nextLine();
+
+            Pokemon pokemonSelected = null;
+
+            if (choice.equalsIgnoreCase("cancel")) {
+                System.out.println("INF: Operation Canceled!");
+                System.out.println("");
+            } else {
+                pokemonSelected = pokemons.get(choice);
+                if (pokemonSelected == null) {
+                    System.out.println("INF: Please select a valid pokemon");
+                } else {
+                    System.out.println("GOOD! CURRENT POKEMON-> " + pokemonSelected.getPokemonNickName() + "(" + pokemonSelected.name + ")");
+                    //Set current pokemon to make actions
+                }
+            }
+        }
     }
     
     public void mainMenu(){
